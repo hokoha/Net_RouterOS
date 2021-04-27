@@ -286,17 +286,9 @@ class Client
         $timeout = null
     ) {
         $request = new Request('/login');
-        $request->send($com);
-        $response = new Response($com, false, $timeout);
         $request->setArgument('name', $username);
-        $request->setArgument(
-            'response',
-            '00' . md5(
-                chr(0) . $password
-                . pack('H*', $response->getProperty('ret'))
-            )
-        );
-        $request->verify($com)->send($com);
+        $request->setArgument('password', $password);
+        $request->send($com);
 
         $response = new Response($com, false, $timeout);
         if ($response->getType() === Response::TYPE_FINAL) {
